@@ -1,14 +1,15 @@
 package main;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import display.*;
-import engine.*;
 import reader.*;
+import scenes.*;
 import settings.*;
 
 public class Main {
-    static Engine engine = new Engine();
+    static SceneTemplate currentScene = new MainMenu();
     static Display display = new Display();
     static Reader reader = new Reader();
 
@@ -16,8 +17,10 @@ public class Main {
     static long lastProcessesEndTimeNano = System.nanoTime();
     static long processesEndTimeNano;
     static long accumulatorTimeNano = 0;
-    static double deltaTimeSeconds;
+    static long deltaTimeNano;
+    static double interpolationProgress;
     static final long nanoPerTick = (long) (1000000000 / Settings.ticksPerSecond);
+    static final long nanoPerFrame = (long) (1000000000 / Settings.framesPerSecond);
 
     public static void main(String[] args) {
         checkMouseDogFile();
@@ -27,17 +30,25 @@ public class Main {
     public static void mainLoop() {
         while (run) {
             processesEndTimeNano = System.nanoTime();
-            deltaTimeSeconds = (double) (processesEndTimeNano - lastProcessesEndTimeNano) / 1000000000;
+            deltaTimeNano = (processesEndTimeNano - lastProcessesEndTimeNano);
+            interpolationProgress += (double) (deltaTimeNano % nanoPerTick) / nanoPerTick;
+            interpolationProgress %= (double) 1.0;
 
-            lastProcessesEndTimeNano += (long) (deltaTimeSeconds * 1000000000);
-            accumulatorTimeNano += (long) (deltaTimeSeconds * 1000000000);
+            lastProcessesEndTimeNano += deltaTimeNano;
+            accumulatorTimeNano += deltaTimeNano;
 
-            reader.tick();
             while (accumulatorTimeNano > nanoPerTick) {
-                engine.tick();
+                currentScene.tick();
                 accumulatorTimeNano -= nanoPerTick;
             }
+            
             display.tick();
+
+            try {
+                TimeUnit.NANOSECONDS.sleep(nanoPerFrame - deltaTimeNano);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -48,8 +59,8 @@ public class Main {
         }
     }
 
-    public static Engine getEngine() {
-        return engine;
+    public static SceneTemplate getCurrentScene() {
+        return currentScene;
     }
 
     public static Display getDisplay() {
@@ -60,7 +71,11 @@ public class Main {
         return reader;
     }
 
-    public static double getDeltaTimeSeconds() {
-        return deltaTimeSeconds;
+    public static double getInterpolationProgress() {
+        return interpolationProgress;
+    }
+
+    public static void changeCurrentScene(SceneTemplate newScene) {
+        currentScene = newScene;
     }
 }
