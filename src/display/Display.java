@@ -9,7 +9,8 @@ import reader.*;
 public class Display {
     JFrame window = new JFrame();
     DisplayPanel displayPanel = new DisplayPanel();
-    Reader reader = new Reader();
+    KeyReader keyReader = new KeyReader();
+    ButtonReader buttonReader = new ButtonReader();
     
     public Display() {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -17,7 +18,8 @@ public class Display {
         window.setLocationRelativeTo(null);
         window.setTitle(Settings.title);
         window.add(displayPanel);
-        window.addKeyListener(reader);
+        window.addKeyListener(keyReader);
+        window.addMouseListener(buttonReader);
         window.setFocusable(true);
         window.setVisible(true);
     }
@@ -32,5 +34,13 @@ public class Display {
 
     public DisplayPanel getDisplayPanel() {
         return displayPanel;
+    }
+
+    public KeyReader getKeyReader() {
+        return keyReader;
+    }
+
+    public ButtonReader getButtonReader() {
+        return buttonReader;
     }
 }

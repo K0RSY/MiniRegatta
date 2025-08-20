@@ -4,14 +4,12 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import display.*;
-import reader.*;
 import scenes.*;
 import settings.*;
 
 public class Main {
     static SceneTemplate currentScene = new MainMenu();
     static Display display = new Display();
-    static Reader reader = new Reader();
 
     static boolean run = true;
     static long lastProcessesEndTimeNano = System.nanoTime();
@@ -65,10 +63,6 @@ public class Main {
 
     public static Display getDisplay() {
         return display;
-    }
-
-    public static Reader getReader() {
-        return reader;
     }
 
     public static double getInterpolationProgress() {

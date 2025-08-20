@@ -23,6 +23,8 @@ public class DisplayPanel extends JPanel {
         BufferedImage.TYPE_INT_ARGB
     );
     Graphics2D drawingSurfaceG2 = drawingSurface.createGraphics();
+    float scale = 0;
+    Dimension windowSize = new Dimension();
 
     public DisplayPanel() {
         setBackground(Color.black);
@@ -51,8 +53,8 @@ public class DisplayPanel extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        Dimension windowSize = Main.getDisplay().getWindow().getSize();
-        float scale = Math.min(
+        windowSize = Main.getDisplay().getWindow().getSize();
+        scale = Math.min(
             (float) windowSize.width / Settings.windowWidth,
             (float) windowSize.height / Settings.windowHeight
         );
@@ -69,5 +71,13 @@ public class DisplayPanel extends JPanel {
             Math.round(Settings.windowHeight * scale),
             null
         );
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
+    public Dimension getWindowSize() {
+        return windowSize;
     }
 }
