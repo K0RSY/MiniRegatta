@@ -1,35 +1,38 @@
 package scenes.objects;
 
 import main.Main;
+import settings.Settings;
 
 public class Button extends Image {
     String pathToActiveImage = "";
     int width = 0;
     int height = 0;
     boolean active = false;
+    Settings.ClickFunctionInterface clickFunctionInterface = () -> {};
 
-    public Button(int positionX, int positionY, String pathToImage, String pathToActiveImage, int width, int height) {
+    public Button(int positionX, int positionY, String pathToImage, String pathToActiveImage, int width, int height, Settings.ClickFunctionInterface clickFunctionInterface) {
         super(positionX, positionY, pathToImage);
         this.pathToActiveImage = pathToActiveImage;
         this.width = width;
         this.height = height;
+        this.clickFunctionInterface = clickFunctionInterface;
     }
 
     public void tick() {
-        int clickX = Main.getDisplay().getButtonReader().getClickX();
-        int clickY = Main.getDisplay().getButtonReader().getClickY();
+        int mousePositionX = Main.getDisplay().getMouseReader().getPositionX();
+        int mousePositionY = Main.getDisplay().getMouseReader().getPositionY();
         boolean pressed = Main.getDisplay().getButtonReader().getPressed();
 
         if (
-            (positionX - width / 2 < clickX && clickX < positionX + width / 2) && 
-            (positionY - height / 2 < clickY && clickY < positionY + height / 2)
+            (positionX - width / 2 < mousePositionX && mousePositionX < positionX + width / 2) && 
+            (positionY - height / 2 < mousePositionY && mousePositionY < positionY + height / 2)
         ) {
             if (pressed) {
                 active = true;
             }
             else if (active == true) {
                 active = false;
-                click();
+                clickFunctionInterface.clickFunction();
             }
         }
         else {
@@ -52,9 +55,5 @@ public class Button extends Image {
 
     public void setPathToActiveImage(String pathToActiveImage) {
         this.pathToActiveImage = pathToActiveImage;
-    }
-
-    public void click() {
-        System.out.println("sex");
     }
 }

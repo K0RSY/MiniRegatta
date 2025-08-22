@@ -11,6 +11,7 @@ public class Display {
     DisplayPanel displayPanel = new DisplayPanel();
     KeyReader keyReader = new KeyReader();
     ButtonReader buttonReader = new ButtonReader();
+    MouseReader mouseReader = new MouseReader();
     
     public Display() {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -20,6 +21,7 @@ public class Display {
         window.add(displayPanel);
         window.addKeyListener(keyReader);
         window.addMouseListener(buttonReader);
+        window.addMouseMotionListener(mouseReader);
         window.setFocusable(true);
         window.setVisible(true);
     }
@@ -42,5 +44,9 @@ public class Display {
 
     public ButtonReader getButtonReader() {
         return buttonReader;
+    }
+
+    public MouseReader getMouseReader() {
+        return mouseReader;
     }
 }

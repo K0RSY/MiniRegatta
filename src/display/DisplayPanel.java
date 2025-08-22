@@ -59,6 +59,9 @@ public class DisplayPanel extends JPanel {
             (float) windowSize.height / Settings.windowHeight
         );
 
+        drawingSurfaceG2.setColor(getBackground());
+        drawingSurfaceG2.fillRect(0, 0, Settings.windowWidth, Settings.windowHeight);
+
         for (ObjectTemplate object : Main.getCurrentScene().getObjects()) {
             object.draw();
         }
