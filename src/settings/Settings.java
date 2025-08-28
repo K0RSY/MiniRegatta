@@ -2,7 +2,7 @@ package settings;
 
 public class Settings {
     public static final int ticksPerSecond = 20;
-    public static final int framesPerSecond = 30;
+    public static final int framesPerSecond = 60;
     public static final int windowWidth = 640;
     public static final int windowHeight = 360;
     public static final String title = "MiniRegatta";

@@ -36,6 +36,9 @@ public class Yacht extends ObjectTemplate {
 
     int windStage;
 
+    float lastPositionX;
+    float lastPositionY;
+
     public Yacht(int positionX, int positionY, String pathToHullImages, String pathToSailImages, String pathToWindImages, int hullImagesCount, int sailImagesCount, int windImagesCount, int windStagesCount, int hullRotationDegrees, float sailEase, float windSpeed, int windRotationDegrees) {
         super(positionX, positionY);
 
@@ -60,6 +63,9 @@ public class Yacht extends ObjectTemplate {
     }
 
     public void tick() {
+        lastPositionX = precisePositionX;
+        lastPositionY = precisePositionY;
+
         ArrayList<Integer> pressedKeys = Main.getDisplay().getKeyReader().getPressedKeys();
 
         int lastTack = tack;
@@ -122,9 +128,21 @@ public class Yacht extends ObjectTemplate {
     }
 
     public void draw() {
-        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(windRotationDegrees, pathToWindImages + windStage + "/", windImagesCount), positionX, positionY);
-        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(hullRotationDegrees, pathToHullImages, hullImagesCount), positionX, positionY);
-        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(sailRotationDegrees, pathToSailImages, sailImagesCount), positionX, positionY);
+        float interpolationProgress = Main.getInterpolationProgress();
+        int yachtPositionX;
+        int yachtPositionY;
+
+        if (lastPositionX != 0 && lastPositionY != 0) {
+            yachtPositionX = Math.round(lastPositionX + (positionX - lastPositionX) * interpolationProgress);
+            yachtPositionY = Math.round(lastPositionY + (positionY - lastPositionY) * interpolationProgress);
+        } else {
+            yachtPositionX = positionX;
+            yachtPositionY = positionY;
+        }
+
+        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(windRotationDegrees, pathToWindImages + windStage + "/", windImagesCount), yachtPositionX, yachtPositionY);
+        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(hullRotationDegrees, pathToHullImages, hullImagesCount), yachtPositionX, yachtPositionY);
+        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(sailRotationDegrees, pathToSailImages, sailImagesCount), yachtPositionX, yachtPositionY);
     }
 
     public void setPathToActiveImage(String pathToActiveImage) {

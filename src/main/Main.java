@@ -16,7 +16,7 @@ public class Main {
     static long processesEndTimeNano;
     static long accumulatorTimeNano = 0;
     static long deltaTimeNano;
-    static double interpolationProgress;
+    static float interpolationProgress;
     static final long nanoPerTick = (long) (1000000000 / Settings.ticksPerSecond);
     static final long nanoPerFrame = (long) (1000000000 / Settings.framesPerSecond);
 
@@ -65,7 +65,7 @@ public class Main {
         return display;
     }
 
-    public static double getInterpolationProgress() {
+    public static float getInterpolationProgress() {
         return interpolationProgress;
     }
 
