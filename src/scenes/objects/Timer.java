@@ -8,6 +8,7 @@ public class Timer extends Text {
     int warningTime;
     int addTime;
     int startTime;
+    String warning;
 
     public Timer(int positionX, int positionY, int size, int startTime, String pathToImages, int symbolWidth) {
         super(positionX, positionY, "", pathToImages, symbolWidth);
@@ -25,7 +26,7 @@ public class Timer extends Text {
 
         if (warningTime > 0) {
             warningTime -= 1;
-            text += " +" + addTime / 20;
+            text += "\n+" + addTime / 20 + " " + warning;
         }
     }
 
@@ -51,9 +52,10 @@ public class Timer extends Text {
         return warningTime == 0;
     }
 
-    public void addTime(int time) {
+    public void addTime(int time, String warning) {
         this.time += time;
         addTime = time;
         warningTime = Settings.warningTime;
+        this.warning = warning;
     }
 }

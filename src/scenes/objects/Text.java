@@ -17,9 +17,13 @@ public class Text extends ObjectTemplate {
     }
 
     public void draw() {
-        int startPositionX = positionX - (text.length() - 1) * symbolWidth / 2;
-        for (int i = 0; i < text.length(); i++) {
-            Main.getDisplay().getDisplayPanel().drawImage(pathToImages + text.charAt(i) + Settings.imageFile, startPositionX + i * symbolWidth, positionY);
+        String[] textLines = text.split("\\r?\\n");
+
+        for (int lineCounter = 0; lineCounter < textLines.length; lineCounter++) {
+            int startPositionX = positionX - (textLines[lineCounter].length() - 1) * symbolWidth / 2;
+            for (int i = 0; i < textLines[lineCounter].length(); i++) {
+                Main.getDisplay().getDisplayPanel().drawImage(pathToImages + textLines[lineCounter].charAt(i) + Settings.imageFile, startPositionX + i * symbolWidth, positionY + lineCounter * symbolWidth);
+            }
         }
     }
 

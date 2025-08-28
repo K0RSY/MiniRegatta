@@ -184,7 +184,7 @@ public class Game extends SceneTemplate {
 
             if (yachtPositionX > positionFirstX && yachtPositionX < positionSecondX && yachtPositionY > positionFirstY && yachtPositionY < positionSecondY) {
                 if (((Timer) objects.get("gui").get(0)).getWarningTimeOut()) {
-                    ((Timer) objects.get("gui").get(0)).addTime(Settings.buoyCollisionAddTime);
+                    ((Timer) objects.get("gui").get(0)).addTime(Settings.buoyCollisionAddTime, "buoy collision");
                 }
                 
                 int newYachtPositionX = Math.round(positionX + (yachtPositionX - positionX) * Settings.buoyCollisionDistaceMultiplier);
@@ -202,7 +202,7 @@ public class Game extends SceneTemplate {
             needToStart = false;
             
             if (!falseStartWarned && !yachtInStartZone) {
-                ((Timer) objects.get("gui").get(0)).addTime(Settings.falseStartCollisionAddTime);
+                ((Timer) objects.get("gui").get(0)).addTime(Settings.falseStartCollisionAddTime, "false start");
                 falseStartWarned = true;
             }
         }

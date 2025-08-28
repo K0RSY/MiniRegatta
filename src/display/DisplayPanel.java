@@ -66,9 +66,12 @@ public class DisplayPanel extends JPanel {
         ArrayList<String> objectKeys = new ArrayList<String>(objects.keySet());
 
         for (String objectKey : objectKeys) {
-            ArrayList<ObjectTemplate> objectGroup = objects.get(objectKey);
-            for (int i = 0; i < objectGroup.size(); i++) {
-                objectGroup.get(i).draw();
+            try {
+                for (int i = 0; i < objects.get(objectKey).size(); i++) {
+                    objects.get(objectKey).get(i).draw();
+                }
+            } catch (java.lang.NullPointerException e) {
+                // e.printStackTrace();
             }
         }
 
