@@ -8,22 +8,21 @@ import settings.Settings;
 import calc.*;
 
 public class Yacht extends ObjectTemplate {
-    ArrayList<String> pathToHullImages = new ArrayList<String>();
-    ArrayList<String> pathToSailImages = new ArrayList<String>();
-    ArrayList<String> pathToWindImages = new ArrayList<String>();
+    String pathToHullImages;
+    String pathToSailImages;
+    String pathToWindImages;
+
+    int hullImagesCount;
+    int sailImagesCount;
+    int windImagesCount;
+
+    int windStagesCount;
 
     float precisePositionX;
     float precisePositionY;
 
-    int degreesPerHullImage;
-    int degreesPerSailImage;
-    int degreesPerWindImage;
-
-    int width = 0;
-    int height = 0;
-
-    int hullRotationDegrees = 0;
-    int sailRotationDegrees = 0;
+    int hullRotationDegrees;
+    int sailRotationDegrees;
     float sailEase = 0;
 
     int windRotationDegrees;
@@ -35,7 +34,9 @@ public class Yacht extends ObjectTemplate {
 
     int tack;
 
-    public Yacht(int positionX, int positionY, ArrayList<String> pathToHullImages, ArrayList<String> pathToSailImages, ArrayList<String> pathToWindImages, int height, int width, int hullRotationDegrees, int sailRotationDegrees, float windSpeed, int windRotationDegrees) {
+    int windStage;
+
+    public Yacht(int positionX, int positionY, String pathToHullImages, String pathToSailImages, String pathToWindImages, int hullImagesCount, int sailImagesCount, int windImagesCount, int windStagesCount, int hullRotationDegrees, float sailEase, float windSpeed, int windRotationDegrees) {
         super(positionX, positionY);
 
         this.precisePositionX = (float) positionX;
@@ -45,18 +46,17 @@ public class Yacht extends ObjectTemplate {
         this.pathToSailImages = pathToSailImages;
         this.pathToWindImages = pathToWindImages;
 
-        this.hullRotationDegrees = hullRotationDegrees;
-        this.sailRotationDegrees = sailRotationDegrees;
+        this.hullImagesCount = hullImagesCount;
+        this.sailImagesCount = sailImagesCount;
+        this.windImagesCount = windImagesCount;
 
-        this.width = width;
-        this.height = height;
+        this.windStagesCount = windStagesCount;
+
+        this.hullRotationDegrees = hullRotationDegrees;
+        this.sailEase = sailEase;
 
         this.windRotationDegrees = windRotationDegrees;
         this.windSpeed = windSpeed;
-
-        degreesPerHullImage = 360 / pathToHullImages.size();
-        degreesPerSailImage = 360 / pathToSailImages.size();
-        degreesPerWindImage = 360 / pathToWindImages.size();
     }
 
     public void tick() {
@@ -89,9 +89,13 @@ public class Yacht extends ObjectTemplate {
             }
         }
 
-        speed = (1 - Math.abs(optimalEase - sailEase)) * windSpeed;
+        float easeСloseness = Math.abs(optimalEase - sailEase);
 
-        if (- optimalEase + 1 >= 1) {
+        windStage = Math.min(windStagesCount - 1, Math.round(easeСloseness * windStagesCount));
+
+        speed = (1 - easeСloseness) * windSpeed;
+
+        if (1 - optimalEase >= 1) {
             speed /= 2;
         }
         
@@ -101,18 +105,26 @@ public class Yacht extends ObjectTemplate {
         precisePositionX += Calc.findB(hullRotationDegrees, speed);
         precisePositionY += Calc.findA(hullRotationDegrees, speed);
 
+        precisePositionX = Math.min(Settings.windowWidth, Math.max(precisePositionX, 0));
+        precisePositionY = Math.min(Settings.windowHeight, Math.max(precisePositionY, 0));
+
         positionX = Math.round(precisePositionX);
         positionY = Math.round(precisePositionY);
     }
 
-    public String getImageFromRotation(int rotationDegrees, int degreesPerImage, ArrayList<String> pathTomages) {
-        return pathTomages.get(Math.min(pathTomages.size() - 1, Calc.getRoundedDegrees(rotationDegrees + degreesPerImage / 2) / degreesPerImage));
+    public String getImageFromRotation(int rotationDegrees, String pathToImages, int imagesCount) {
+        String imageName = pathToImages;
+        float degreesPerImage = (360f / (float) imagesCount);
+        imageName += Calc.getRoundedDegrees((int) Math.ceil(rotationDegrees + degreesPerImage / 2 - (rotationDegrees + degreesPerImage / 2) % degreesPerImage));
+        imageName += Settings.imageFile;
+
+        return imageName;
     }
 
     public void draw() {
-        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(windRotationDegrees, degreesPerWindImage, pathToWindImages), positionX, positionY);
-        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(hullRotationDegrees, degreesPerHullImage, pathToHullImages), positionX, positionY);
-        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(sailRotationDegrees, degreesPerSailImage, pathToSailImages), positionX, positionY);
+        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(windRotationDegrees, pathToWindImages + windStage + "/", windImagesCount), positionX, positionY);
+        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(hullRotationDegrees, pathToHullImages, hullImagesCount), positionX, positionY);
+        Main.getDisplay().getDisplayPanel().drawImage(getImageFromRotation(sailRotationDegrees, pathToSailImages, sailImagesCount), positionX, positionY);
     }
 
     public void setPathToActiveImage(String pathToActiveImage) {
@@ -124,5 +136,15 @@ public class Yacht extends ObjectTemplate {
 
     public int getSailRotationDegrees() {
         return sailRotationDegrees;
+    }
+
+    public void setPositionX(int positionX) {
+        this.positionX = positionX;
+        this.precisePositionX = positionX;
+    }
+
+    public void setPositionY(int positionY) {
+        this.positionY = positionY;
+        this.precisePositionY = positionY;
     }
 }

@@ -8,6 +8,8 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -59,11 +61,15 @@ public class DisplayPanel extends JPanel {
             (float) windowSize.height / Settings.windowHeight
         );
 
-        drawingSurfaceG2.setColor(getBackground());
-        drawingSurfaceG2.fillRect(0, 0, Settings.windowWidth, Settings.windowHeight);
+        LinkedHashMap<String, ArrayList<ObjectTemplate>> objects = Main.getCurrentScene().getObjects();
 
-        for (ObjectTemplate object : Main.getCurrentScene().getObjects()) {
-            object.draw();
+        ArrayList<String> objectKeys = new ArrayList<String>(objects.keySet());
+
+        for (String objectKey : objectKeys) {
+            ArrayList<ObjectTemplate> objectGroup = objects.get(objectKey);
+            for (int i = 0; i < objectGroup.size(); i++) {
+                objectGroup.get(i).draw();
+            }
         }
 
         g2.drawImage(
