@@ -7,7 +7,7 @@ public class Settings {
     public static final int windowHeight = 360;
     public static final String title = "MiniRegatta";
     public static final String imageFile = ".png";
-    public static final String mapPath = "res/maps/";
+    public static final String mapPath = "/res/maps/";
     public static final int hullRotationSpeed = 3;
     public static final float sailEasingSpeed = .05f;
     public static final int headToWindHullRotationSpeed = 18;

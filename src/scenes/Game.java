@@ -1,8 +1,7 @@
 package scenes;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,18 +66,17 @@ public class Game extends SceneTemplate {
         startBuoyAnimations.put("unflag", new ArrayList<String>());
         startBuoyAnimations.put("flagged", new ArrayList<String>());
 
-        Collections.addAll(buoyAnimations.get("flag"), "res/textures/buoy/crossing/flag/0.png", "res/textures/buoy/crossing/flag/1.png", "res/textures/buoy/crossing/flag/2.png", "res/textures/buoy/crossing/flag/3.png", "res/textures/buoy/crossing/flag/4.png");
-        Collections.addAll(buoyAnimations.get("unflag"), "res/textures/buoy/crossing/unflag/0.png", "res/textures/buoy/crossing/unflag/1.png", "res/textures/buoy/crossing/unflag/2.png", "res/textures/buoy/crossing/unflag/3.png", "res/textures/buoy/crossing/unflag/4.png");
-        Collections.addAll(buoyAnimations.get("flagged"), "res/textures/buoy/crossing/flagged/0.png", "res/textures/buoy/crossing/flagged/1.png", "res/textures/buoy/crossing/flagged/2.png", "res/textures/buoy/crossing/flagged/3.png");
+        Collections.addAll(buoyAnimations.get("flag"), "/res/textures/buoy/crossing/flag/0.png", "/res/textures/buoy/crossing/flag/1.png", "/res/textures/buoy/crossing/flag/2.png", "/res/textures/buoy/crossing/flag/3.png", "/res/textures/buoy/crossing/flag/4.png");
+        Collections.addAll(buoyAnimations.get("unflag"), "/res/textures/buoy/crossing/unflag/0.png", "/res/textures/buoy/crossing/unflag/1.png", "/res/textures/buoy/crossing/unflag/2.png", "/res/textures/buoy/crossing/unflag/3.png", "/res/textures/buoy/crossing/unflag/4.png");
+        Collections.addAll(buoyAnimations.get("flagged"), "/res/textures/buoy/crossing/flagged/0.png", "/res/textures/buoy/crossing/flagged/1.png", "/res/textures/buoy/crossing/flagged/2.png", "/res/textures/buoy/crossing/flagged/3.png");
 
-        Collections.addAll(startBuoyAnimations.get("unflag"), "res/textures/buoy/start/0.png", "res/textures/buoy/start/1.png", "res/textures/buoy/start/2.png", "res/textures/buoy/start/3.png");
+        Collections.addAll(startBuoyAnimations.get("unflag"), "/res/textures/buoy/start/0.png", "/res/textures/buoy/start/1.png", "/res/textures/buoy/start/2.png", "/res/textures/buoy/start/3.png");
     }
 
     public void loadMap(String map) {
         try {
-            FileInputStream fos = new FileInputStream(Settings.mapPath + map);
-            BufferedInputStream bos = new BufferedInputStream(fos);
-            ObjectInputStream oos = new ObjectInputStream(bos);
+            InputStream os = getClass().getResourceAsStream(Settings.mapPath + map);
+            ObjectInputStream oos = new ObjectInputStream(os);
 
             MapTemplate mapData = (MapTemplate) oos.readObject();
 
@@ -96,20 +94,20 @@ public class Game extends SceneTemplate {
             String pathToMainShipImage;
 
             if (mapData.start.startX != 0) {
-                pathToUnflaggedImage = "res/textures/start/unflagged/vertical.png";
-                pathToFlaggedImage = "res/textures/start/flagged/vertical.png";
+                pathToUnflaggedImage = "/res/textures/start/unflagged/vertical.png";
+                pathToFlaggedImage = "/res/textures/start/flagged/vertical.png";
                 if (mapData.start.startX == 1) {
-                    pathToMainShipImage = "res/textures/buoy/main_ship/270.png";
+                    pathToMainShipImage = "/res/textures/buoy/main_ship/270.png";
                 } else {
-                    pathToMainShipImage = "res/textures/buoy/main_ship/90.png";
+                    pathToMainShipImage = "/res/textures/buoy/main_ship/90.png";
                 }
             } else {
-                pathToUnflaggedImage = "res/textures/start/unflagged/horisontal.png";
-                pathToFlaggedImage = "res/textures/start/flagged/horisontal.png";
+                pathToUnflaggedImage = "/res/textures/start/unflagged/horisontal.png";
+                pathToFlaggedImage = "/res/textures/start/flagged/horisontal.png";
                 if (mapData.start.startY == 1) {
-                    pathToMainShipImage = "res/textures/buoy/main_ship/0.png";
+                    pathToMainShipImage = "/res/textures/buoy/main_ship/0.png";
                 } else {
-                    pathToMainShipImage = "res/textures/buoy/main_ship/180.png";
+                    pathToMainShipImage = "/res/textures/buoy/main_ship/180.png";
                 }
             }
 
@@ -121,19 +119,18 @@ public class Game extends SceneTemplate {
             objects.get("buoys").add(new Buoy(mapData.start.positionX - (mapData.start.lenght / 2) * mapData.start.startY, mapData.start.positionY - (mapData.start.lenght / 2) * mapData.start.startX, 24, 20, startBuoyAnimations, startBuoyLoops, 2, 1, 1, false));
             objects.get("buoys").add(new Buoy(mapData.start.positionX + (mapData.start.lenght / 2) * mapData.start.startY, mapData.start.positionY + (mapData.start.lenght / 2) * mapData.start.startX, 16, 16, startBuoyAnimations, startBuoyLoops, 2, -1, 1, false));    
 
-            objects.get("background").add(new Image(Settings.windowWidth / 2, Settings.windowHeight / 2, "res/textures/background.png"));
+            objects.get("background").add(new Image(Settings.windowWidth / 2, Settings.windowHeight / 2, "/res/textures/background.png"));
 
-            objects.get("yacht").add(new Yacht(mapData.yacht.positionX, mapData.yacht.positionY, "res/textures/yacht/hull/", "res/textures/yacht/sail/", "res/textures/yacht/wind/", 16, 16, 16, 3, mapData.yacht.hullRotationDegrees, mapData.yacht.sailEase, mapData.yacht.windSpeed, mapData.yacht.windRotationDegrees));
+            objects.get("yacht").add(new Yacht(mapData.yacht.positionX, mapData.yacht.positionY, "/res/textures/yacht/hull/", "/res/textures/yacht/sail/", "/res/textures/yacht/wind/", 16, 16, 16, 3, mapData.yacht.hullRotationDegrees, mapData.yacht.sailEase, mapData.yacht.windSpeed, mapData.yacht.windRotationDegrees));
 
-            objects.get("gui").add(new Timer(Settings.windowWidth / 2, 10, 10, mapData.startTime, "res/textures/font/", 8));
+            objects.get("gui").add(new Timer(Settings.windowWidth / 2, 10, 10, mapData.startTime, "/res/textures/font/", 8));
 
             ((StartLine) objects.get("start").get(0)).toogleFlagged();
 
             ((Buoy) objects.get("buoys").get(objects.get("buoys").size() - 1)).toogleFlagged();
 
             oos.close();
-            bos.close();
-            fos.close();
+            os.close();
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
@@ -173,14 +170,14 @@ public class Game extends SceneTemplate {
 
                 crossedCurrentBuoyStart = false;
 
-                Main.getSpeaker().addSoundToQueue("res/sounds/buoy_crossed.wav");
+                Main.getSpeaker().addSoundToQueue("/res/sounds/buoy_crossed.wav");
 
             } else if (!currentBuoy.getInCrossQuarter(yachtQuarterX, yachtQuarterY)) {
                 crossedCurrentBuoyStart = false;
             }
         } else if (needToFinish) {
             if (yachtInPreFinishZone && ((StartLine) objects.get("start").get(0)).getInFinishZone(yachtPositionX, yachtPositionY)) {
-                Main.getSpeaker().addSoundToQueue("res/sounds/start_whisle.wav");
+                Main.getSpeaker().addSoundToQueue("/res/sounds/start_whisle.wav");
                 Main.changeCurrentScene(new Transition(new Game()));
             }
         }
@@ -202,7 +199,7 @@ public class Game extends SceneTemplate {
             if (yachtPositionX > positionFirstX && yachtPositionX < positionSecondX && yachtPositionY > positionFirstY && yachtPositionY < positionSecondY) {
                 if (((Timer) objects.get("gui").get(0)).getWarningTimeOut()) {
                     ((Timer) objects.get("gui").get(0)).addTime(Settings.buoyCollisionAddTime, "buoy collision");
-                    Main.getSpeaker().addSoundToQueue("res/sounds/warning_whisle.wav");
+                    Main.getSpeaker().addSoundToQueue("/res/sounds/warning_whisle.wav");
                 }
                 
                 int newYachtPositionX = Math.round(positionX + (yachtPositionX - positionX) * Settings.buoyCollisionDistaceMultiplier);
@@ -222,13 +219,13 @@ public class Game extends SceneTemplate {
                 
                 if (!falseStartWarned && !yachtInStartZone) {
                     ((Timer) objects.get("gui").get(0)).addTime(Settings.falseStartCollisionAddTime, "false start");
-                    Main.getSpeaker().addSoundToQueue("res/sounds/warning_whisle.wav");
+                    Main.getSpeaker().addSoundToQueue("/res/sounds/warning_whisle.wav");
                     falseStartWarned = true;
                 }
             }
 
             if (!startGiven && !falseStartWarned) {
-                Main.getSpeaker().addSoundToQueue("res/sounds/start_whisle.wav");
+                Main.getSpeaker().addSoundToQueue("/res/sounds/start_whisle.wav");
                 startGiven = true;
             }
         }

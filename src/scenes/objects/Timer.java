@@ -24,7 +24,7 @@ public class Timer extends Text {
             startTime--;
             text = "" + (startTime / 20 + 1);
             if (startTime % 20 == 0 && startTime >= 20) {
-                Main.getSpeaker().addSoundToQueue("res/sounds/countdown.wav");
+                Main.getSpeaker().addSoundToQueue("/res/sounds/countdown.wav");
             }
         }
 

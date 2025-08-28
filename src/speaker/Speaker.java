@@ -1,7 +1,7 @@
 package speaker;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -19,9 +19,9 @@ public class Speaker extends Thread {
 
     public void playSound(String pathToSound) {
         try {
-            File soundFile = new File(pathToSound);
+            URL soundURL = getClass().getResource(pathToSound);
 
-            AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
+            AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL);
 
             Clip clip = AudioSystem.getClip();
 

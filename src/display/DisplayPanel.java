@@ -6,8 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -30,12 +30,12 @@ public class DisplayPanel extends JPanel {
 
     public DisplayPanel() {
         setBackground(Color.black);
-        // setDoubleBuffered(true);
     }
 
     public void drawImage(String pathToImage, int positionX, int positionY) {
         try {
-            Image image = ImageIO.read(new File(pathToImage));
+            URL imageURL = getClass().getResource(pathToImage);
+            Image image = ImageIO.read(imageURL);
 
             drawingSurfaceG2.drawImage(
                 image,
@@ -71,7 +71,6 @@ public class DisplayPanel extends JPanel {
                     objects.get(objectKey).get(i).draw();
                 }
             } catch (java.lang.NullPointerException e) {
-                // e.printStackTrace();
             }
         }
 

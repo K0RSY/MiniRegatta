@@ -1,6 +1,6 @@
 package main;
 
-import java.io.File;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import display.*;
@@ -25,7 +25,7 @@ public class Main {
     public static void main(String[] args) {
         checkMouseDogFile();
         speaker.start();
-        Main.getSpeaker().addSoundToQueue("res/sounds/init.wav");
+        Main.getSpeaker().addSoundToQueue("/res/sounds/init.wav");
         mainLoop();
     }
 
@@ -55,8 +55,8 @@ public class Main {
     }
 
     public static void checkMouseDogFile() {
-        File mouse_dog_file = new File("res/mouse_dog.png");
-        if(!mouse_dog_file.exists() || mouse_dog_file.isDirectory()) {
+        URL mouseDogURL = Main.class.getClassLoader().getResource("/res/mouse_dog.png");
+        if (mouseDogURL != null) {
             throw new java.lang.Error("Mouse-dog image not found");
         }
     }

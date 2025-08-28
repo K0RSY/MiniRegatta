@@ -15,14 +15,14 @@ public class Transition extends SceneTemplate {
 
     public Transition(SceneTemplate newScene) {
         this.newScene = newScene;
-        Main.getSpeaker().addSoundToQueue("res/sounds/transition.wav");
+        Main.getSpeaker().addSoundToQueue("/res/sounds/transition.wav");
         addTransition(objects);
     }
 
     public void addTransition(LinkedHashMap<String, ArrayList<ObjectTemplate>> objects) {
         objects.put("transition", new ArrayList<ObjectTemplate>());
 
-        objects.get("transition").add(new scenes.objects.Transition("res/textures/transition.png"));
+        objects.get("transition").add(new scenes.objects.Transition("/res/textures/transition.png"));
     }
 
     public void tick() {
