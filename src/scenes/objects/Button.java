@@ -32,6 +32,7 @@ public class Button extends Image {
             }
             else if (active == true) {
                 active = false;
+                Main.getSpeaker().addSoundToQueue("res/sounds/click.wav");
                 clickFunctionInterface.clickFunction();
             }
         }

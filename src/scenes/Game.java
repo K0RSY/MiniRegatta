@@ -25,6 +25,7 @@ public class Game extends SceneTemplate {
 
     boolean yachtInStartZone;
     boolean yachtInPreFinishZone;
+    boolean startGiven;
 
     boolean falseStartWarned = false;
 
@@ -87,7 +88,7 @@ public class Game extends SceneTemplate {
                 int quarterX = buoy.crossQuarter == 2 || buoy.crossQuarter == 3 ? -1 : 1;
                 int quarterY = buoy.crossQuarter == 0 || buoy.crossQuarter == 3 ? -1 : 1;
 
-                objects.get("buoys").add(new Buoy(buoy.positionX, buoy.positionY, 28, 16, buoyAnimations, buoyLoops, 2, quarterX, quarterY, buoy.crossByLeftSide));
+                objects.get("buoys").add(new Buoy(buoy.positionX, buoy.positionY, 24, 20, buoyAnimations, buoyLoops, 2, quarterX, quarterY, buoy.crossByLeftSide));
             }
 
             String pathToFlaggedImage;
@@ -171,11 +172,15 @@ public class Game extends SceneTemplate {
                 lastYachtQuarterY = 0;
 
                 crossedCurrentBuoyStart = false;
+
+                Main.getSpeaker().addSoundToQueue("res/sounds/buoy_crossed.wav");
+
             } else if (!currentBuoy.getInCrossQuarter(yachtQuarterX, yachtQuarterY)) {
                 crossedCurrentBuoyStart = false;
             }
         } else if (needToFinish) {
             if (yachtInPreFinishZone && ((StartLine) objects.get("start").get(0)).getInFinishZone(yachtPositionX, yachtPositionY)) {
+                Main.getSpeaker().addSoundToQueue("res/sounds/start_whisle.wav");
                 Main.changeCurrentScene(new Transition(new Game()));
             }
         }
@@ -197,6 +202,7 @@ public class Game extends SceneTemplate {
             if (yachtPositionX > positionFirstX && yachtPositionX < positionSecondX && yachtPositionY > positionFirstY && yachtPositionY < positionSecondY) {
                 if (((Timer) objects.get("gui").get(0)).getWarningTimeOut()) {
                     ((Timer) objects.get("gui").get(0)).addTime(Settings.buoyCollisionAddTime, "buoy collision");
+                    Main.getSpeaker().addSoundToQueue("res/sounds/warning_whisle.wav");
                 }
                 
                 int newYachtPositionX = Math.round(positionX + (yachtPositionX - positionX) * Settings.buoyCollisionDistaceMultiplier);
@@ -207,15 +213,23 @@ public class Game extends SceneTemplate {
             }
         }
         
-        if (needToStart && ((Timer) objects.get("gui").get(0)).startTimeOut() && ((StartLine) objects.get("start").get(0)).getInPreStartZone(yachtPositionX, yachtPositionY)) {
-            ((StartLine) objects.get("start").get(0)).toogleFlagged();
-            ((Buoy) objects.get("buoys").get(buoyIndexOrder.get(0))).toogleFlagged();
+        if (((Timer) objects.get("gui").get(0)).startTimeOut()) {
+            if (needToStart && ((StartLine) objects.get("start").get(0)).getInPreStartZone(yachtPositionX, yachtPositionY)) {
+                ((StartLine) objects.get("start").get(0)).toogleFlagged();
+                ((Buoy) objects.get("buoys").get(buoyIndexOrder.get(0))).toogleFlagged();
+    
+                needToStart = false;
+                
+                if (!falseStartWarned && !yachtInStartZone) {
+                    ((Timer) objects.get("gui").get(0)).addTime(Settings.falseStartCollisionAddTime, "false start");
+                    Main.getSpeaker().addSoundToQueue("res/sounds/warning_whisle.wav");
+                    falseStartWarned = true;
+                }
+            }
 
-            needToStart = false;
-            
-            if (!falseStartWarned && !yachtInStartZone) {
-                ((Timer) objects.get("gui").get(0)).addTime(Settings.falseStartCollisionAddTime, "false start");
-                falseStartWarned = true;
+            if (!startGiven && !falseStartWarned) {
+                Main.getSpeaker().addSoundToQueue("res/sounds/start_whisle.wav");
+                startGiven = true;
             }
         }
 

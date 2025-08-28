@@ -6,10 +6,12 @@ import java.util.concurrent.TimeUnit;
 import display.*;
 import scenes.*;
 import settings.*;
+import speaker.*;
 
 public class Main {
     static SceneTemplate currentScene = new MainMenu();
     static Display display = new Display();
+    static Speaker speaker = new Speaker();
 
     static boolean run = true;
     static long lastProcessesEndTimeNano = System.nanoTime();
@@ -22,6 +24,8 @@ public class Main {
 
     public static void main(String[] args) {
         checkMouseDogFile();
+        speaker.start();
+        Main.getSpeaker().addSoundToQueue("res/sounds/init.wav");
         mainLoop();
     }
 
@@ -63,6 +67,10 @@ public class Main {
 
     public static Display getDisplay() {
         return display;
+    }
+
+    public static Speaker getSpeaker() {
+        return speaker;
     }
 
     public static float getInterpolationProgress() {

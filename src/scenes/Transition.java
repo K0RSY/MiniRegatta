@@ -15,6 +15,7 @@ public class Transition extends SceneTemplate {
 
     public Transition(SceneTemplate newScene) {
         this.newScene = newScene;
+        Main.getSpeaker().addSoundToQueue("res/sounds/transition.wav");
         addTransition(objects);
     }
 

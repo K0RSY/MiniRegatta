@@ -1,5 +1,6 @@
 package scenes.objects;
 
+import main.Main;
 import settings.Settings;
 
 public class Timer extends Text {
@@ -22,6 +23,9 @@ public class Timer extends Text {
         } else {
             startTime--;
             text = "" + (startTime / 20 + 1);
+            if (startTime % 20 == 0 && startTime >= 20) {
+                Main.getSpeaker().addSoundToQueue("res/sounds/countdown.wav");
+            }
         }
 
         if (warningTime > 0) {

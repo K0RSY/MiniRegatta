@@ -80,6 +80,7 @@ public class Yacht extends ObjectTemplate {
 
         if (lastTack != tack) {
             sailRotationDegrees = hullRotationDegrees + 180;
+            Main.getSpeaker().addSoundToQueue("res/sounds/yacht_turn.wav");
         } else {
             sailRotationDegrees = hullRotationDegrees - (int) (-80f * sailEase * (float) tack) + 180;
         }
