@@ -70,9 +70,7 @@ public class Game extends SceneTemplate {
         Collections.addAll(buoyAnimations.get("unflag"), "res/textures/buoy/crossing/unflag/0.png", "res/textures/buoy/crossing/unflag/1.png", "res/textures/buoy/crossing/unflag/2.png", "res/textures/buoy/crossing/unflag/3.png", "res/textures/buoy/crossing/unflag/4.png");
         Collections.addAll(buoyAnimations.get("flagged"), "res/textures/buoy/crossing/flagged/0.png", "res/textures/buoy/crossing/flagged/1.png", "res/textures/buoy/crossing/flagged/2.png", "res/textures/buoy/crossing/flagged/3.png");
 
-        Collections.addAll(startBuoyAnimations.get("flag"), "res/textures/buoy/start/0.png", "res/textures/buoy/start/1.png", "res/textures/buoy/start/2.png", "res/textures/buoy/start/3.png");
         Collections.addAll(startBuoyAnimations.get("unflag"), "res/textures/buoy/start/0.png", "res/textures/buoy/start/1.png", "res/textures/buoy/start/2.png", "res/textures/buoy/start/3.png");
-        Collections.addAll(startBuoyAnimations.get("flagged"), "res/textures/buoy/start/0.png", "res/textures/buoy/start/1.png", "res/textures/buoy/start/2.png", "res/textures/buoy/start/3.png");
     }
 
     public void loadMap(String map) {
@@ -89,24 +87,38 @@ public class Game extends SceneTemplate {
                 int quarterX = buoy.crossQuarter == 2 || buoy.crossQuarter == 3 ? -1 : 1;
                 int quarterY = buoy.crossQuarter == 0 || buoy.crossQuarter == 3 ? -1 : 1;
 
-                objects.get("buoys").add(new Buoy(buoy.positionX, buoy.positionY, 28, 20, buoyAnimations, buoyLoops, 2, quarterX, quarterY, buoy.crossByLeftSide));
+                objects.get("buoys").add(new Buoy(buoy.positionX, buoy.positionY, 28, 16, buoyAnimations, buoyLoops, 2, quarterX, quarterY, buoy.crossByLeftSide));
             }
 
             String pathToFlaggedImage;
             String pathToUnflaggedImage;
+            String pathToMainShipImage;
 
             if (mapData.start.startX != 0) {
                 pathToUnflaggedImage = "res/textures/start/unflagged/vertical.png";
                 pathToFlaggedImage = "res/textures/start/flagged/vertical.png";
+                if (mapData.start.startX == 1) {
+                    pathToMainShipImage = "res/textures/buoy/main_ship/270.png";
+                } else {
+                    pathToMainShipImage = "res/textures/buoy/main_ship/90.png";
+                }
             } else {
                 pathToUnflaggedImage = "res/textures/start/unflagged/horisontal.png";
                 pathToFlaggedImage = "res/textures/start/flagged/horisontal.png";
+                if (mapData.start.startY == 1) {
+                    pathToMainShipImage = "res/textures/buoy/main_ship/0.png";
+                } else {
+                    pathToMainShipImage = "res/textures/buoy/main_ship/180.png";
+                }
             }
+
+            Collections.addAll(startBuoyAnimations.get("flag"), pathToMainShipImage);
+            Collections.addAll(startBuoyAnimations.get("flagged"), pathToMainShipImage);
 
             objects.get("start").add(new StartLine(mapData.start.positionX, mapData.start.positionY, pathToUnflaggedImage, pathToFlaggedImage, 8, mapData.start.lenght / 8, mapData.start.startX, mapData.start.startY, mapData.start.invertFinish));
         
-            objects.get("buoys").add(new Buoy(mapData.start.positionX - (mapData.start.lenght / 2) * mapData.start.startY, mapData.start.positionY - (mapData.start.lenght / 2) * mapData.start.startX, 24, 16, startBuoyAnimations, startBuoyLoops, 2, 1, 1, false));
-            objects.get("buoys").add(new Buoy(mapData.start.positionX + (mapData.start.lenght / 2) * mapData.start.startY, mapData.start.positionY + (mapData.start.lenght / 2) * mapData.start.startX, 24, 16, startBuoyAnimations, startBuoyLoops, 2, -1, 1, false));    
+            objects.get("buoys").add(new Buoy(mapData.start.positionX - (mapData.start.lenght / 2) * mapData.start.startY, mapData.start.positionY - (mapData.start.lenght / 2) * mapData.start.startX, 24, 20, startBuoyAnimations, startBuoyLoops, 2, 1, 1, false));
+            objects.get("buoys").add(new Buoy(mapData.start.positionX + (mapData.start.lenght / 2) * mapData.start.startY, mapData.start.positionY + (mapData.start.lenght / 2) * mapData.start.startX, 16, 16, startBuoyAnimations, startBuoyLoops, 2, -1, 1, false));    
 
             objects.get("background").add(new Image(Settings.windowWidth / 2, Settings.windowHeight / 2, "res/textures/background.png"));
 
