@@ -196,12 +196,12 @@ public class Game extends SceneTemplate {
         }
         
         if (needToStart && ((Timer) objects.get("gui").get(0)).startTimeOut() && ((StartLine) objects.get("start").get(0)).getInPreStartZone(yachtPositionX, yachtPositionY)) {
-            if (yachtInStartZone) {
-                ((StartLine) objects.get("start").get(0)).toogleFlagged();
-                ((Buoy) objects.get("buoys").get(buoyIndexOrder.get(0))).toogleFlagged();
-    
-                needToStart = false;
-            } else if (!falseStartWarned) {
+            ((StartLine) objects.get("start").get(0)).toogleFlagged();
+            ((Buoy) objects.get("buoys").get(buoyIndexOrder.get(0))).toogleFlagged();
+
+            needToStart = false;
+            
+            if (!falseStartWarned && !yachtInStartZone) {
                 ((Timer) objects.get("gui").get(0)).addTime(Settings.falseStartCollisionAddTime);
                 falseStartWarned = true;
             }

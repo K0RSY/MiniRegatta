@@ -10,6 +10,7 @@ import settings.Settings;
 public class Transition extends SceneTemplate {
     SceneTemplate newScene;
     boolean turn = false;
+    int positionX;
 
     public Transition(SceneTemplate newScene) {
         this.newScene = newScene;
@@ -19,11 +20,12 @@ public class Transition extends SceneTemplate {
     public void addTransition(LinkedHashMap<String, ArrayList<ObjectTemplate>> objects) {
         objects.put("transition", new ArrayList<ObjectTemplate>());
 
-        objects.get("transition").add(new Image(-Settings.windowWidth / 2, Settings.windowHeight / 2, "res/textures/transition.png"));
+        objects.get("transition").add(new scenes.objects.Transition("res/textures/transition.png"));
     }
 
     public void tick() {
-        int positionX = objects.get("transition").get(0).getPositionX();
+        objects.get("transition").get(0).tick();
+        positionX = objects.get("transition").get(0).getPositionX();
 
         if (positionX == Settings.windowWidth * 0.5) {
             objects = newScene.objects;
