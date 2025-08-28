@@ -11,6 +11,7 @@ public class Transition extends SceneTemplate {
     SceneTemplate newScene;
     boolean turn = false;
     int positionX;
+    int steps = 1;
 
     public Transition(SceneTemplate newScene) {
         this.newScene = newScene;
@@ -27,17 +28,19 @@ public class Transition extends SceneTemplate {
         objects.get("transition").get(0).tick();
         positionX = objects.get("transition").get(0).getPositionX();
 
-        if (positionX == Settings.windowWidth * 0.5) {
+        if (positionX >= Settings.windowWidth * 0.5 && !turn) {
             objects = newScene.objects;
             addTransition(objects);
             objects.get("transition").get(0).setPositionX((int) (Settings.windowWidth * 0.5 + 1));
             turn = true;
         } else if (positionX < Settings.windowWidth * 0.5 && !turn) {
-            positionX += Settings.transitionSpeed;
+            positionX += Settings.transitionSpeed * Math.pow(Settings.transitionSpeedMultiplier, steps);
             objects.get("transition").get(0).setPositionX(positionX);
+            steps++;
         } else if (positionX > -Settings.windowWidth * 0.5 && turn) {
-            positionX -= Settings.transitionSpeed;
+            positionX -= Settings.transitionSpeed * Math.pow(Settings.transitionSpeedMultiplier, steps);
             objects.get("transition").get(0).setPositionX(positionX);
+            steps--;
         } else {
             objects.remove("transition");
             Main.changeCurrentScene(newScene);
