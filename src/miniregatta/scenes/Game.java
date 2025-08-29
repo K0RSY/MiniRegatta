@@ -1,14 +1,20 @@
 package miniregatta.scenes;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.awt.event.KeyEvent;
 
 import miniregatta.main.Main;
 import miniregatta.maps.data.*;
+import miniregatta.maps.save.Save;
 import miniregatta.scenes.objects.*;
 import miniregatta.settings.Settings;
 
@@ -28,12 +34,17 @@ public class Game extends SceneTemplate {
 
     boolean falseStartWarned = false;
 
+    int currentTime;
+    int previousTime;
+
+    String map;
+
     HashMap<String, ArrayList<String>> buoyAnimations;
     HashMap<String, Boolean> buoyLoops;
     HashMap<String, ArrayList<String>> startBuoyAnimations;
     HashMap<String, Boolean> startBuoyLoops;
 
-    public Game() {
+    public Game(String map) {
         addKey("background");
         addKey("start");
         addKey("buoys");
@@ -41,7 +52,8 @@ public class Game extends SceneTemplate {
         addKey("gui");
 
         loadAnimations();
-        loadMap("one_loop.dat");
+        this.map = map;
+        loadMap();
     }
 
     public void loadAnimations() {
@@ -73,7 +85,7 @@ public class Game extends SceneTemplate {
         Collections.addAll(startBuoyAnimations.get("unflag"), "/resources/textures/buoy/start/0.png", "/resources/textures/buoy/start/1.png", "/resources/textures/buoy/start/2.png", "/resources/textures/buoy/start/3.png");
     }
 
-    public void loadMap(String map) {
+    public void loadMap() {
         try {
             BufferedInputStream bos = (BufferedInputStream) getClass().getResourceAsStream(Settings.mapPath + map);
             ObjectInputStream oos = new ObjectInputStream(bos);
@@ -136,9 +148,48 @@ public class Game extends SceneTemplate {
         }
     }
 
+    public void saveTime() {
+        try {
+            FileInputStream fis = new FileInputStream(Settings.saveFilePath);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            ObjectInputStream ois = new ObjectInputStream(bis);
+
+            Save save = (Save) ois.readObject();
+
+            int time = ((Timer) objects.get("gui").get(0)).getTime();
+
+            currentTime = time;
+            previousTime = save.save.get(map) == null ? Settings.worstTime : save.save.get(map);
+
+            if (save.save.get(map) == null || save.save.get(map) > time) {
+                save.save.put(map, time);
+            }
+    
+            ois.close();
+            bis.close();
+            fis.close();
+
+            FileOutputStream fos = new FileOutputStream(Settings.saveFilePath);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            
+            oos.writeObject(save);
+
+            oos.close();
+            bos.close();
+            fos.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void tick() {
         super.tick();
+
+        if (Main.getDisplay().getKeyReader().getPressedKeys().contains(KeyEvent.VK_ESCAPE)) {
+            Main.changeCurrentScene(new Transition(new MainMenu()));
+        }
 
         Buoy currentBuoy = (Buoy) objects.get("buoys").get(buoyIndexOrder.get(currentBuoyOrderIndex));
 
@@ -178,7 +229,8 @@ public class Game extends SceneTemplate {
         } else if (needToFinish) {
             if (yachtInPreFinishZone && ((StartLine) objects.get("start").get(0)).getInFinishZone(yachtPositionX, yachtPositionY)) {
                 Main.getSpeaker().addSoundToQueue("/resources/sounds/start_whisle.wav");
-                Main.changeCurrentScene(new Transition(new Game()));
+                saveTime();
+                Main.changeCurrentScene(new Transition(new GameFinish(currentTime, previousTime)));
             }
         }
 

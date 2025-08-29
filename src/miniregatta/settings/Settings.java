@@ -8,6 +8,7 @@ public class Settings {
     public static final String title = "MiniRegatta";
     public static final String imageFile = ".png";
     public static final String mapPath = "/resources/maps/";
+    public static final String saveFilePath = System.getProperty("user.home") + "/.miniregatta/save.dat";
     public static final int hullRotationSpeed = 3;
     public static final float sailEasingSpeed = .05f;
     public static final int headToWindHullRotationSpeed = 18;
@@ -18,7 +19,10 @@ public class Settings {
     public static final int falseStartCollisionAddTime = 200;
     public static final int transitionSpeed = 160;
     public static final float transitionSpeedMultiplier = 0.85f;
-
+    public static final int mapsListElementWidth = 30;
+    public static final String mapsListElementFiller = " ";
+    public static final int worstTime = 118800;
+    
     public interface ClickFunctionInterface {
         void clickFunction();
     }

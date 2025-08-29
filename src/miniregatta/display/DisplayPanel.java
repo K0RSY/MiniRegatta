@@ -30,6 +30,7 @@ public class DisplayPanel extends JPanel {
 
     public DisplayPanel() {
         setBackground(Color.black);
+        setDoubleBuffered(true);
     }
 
     public void drawImage(String pathToImage, int positionX, int positionY) {

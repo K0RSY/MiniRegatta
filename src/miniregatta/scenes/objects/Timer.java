@@ -34,7 +34,7 @@ public class Timer extends Text {
         }
     }
 
-    public String getFormattedTime(int time) {
+    public static String getFormattedTime(int time) {
         String minutes = "" + (time / 20) / 60;
         String seconds = "" + (time / 20) % 60;
 

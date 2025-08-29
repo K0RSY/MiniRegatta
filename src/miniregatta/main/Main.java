@@ -1,9 +1,17 @@
 package miniregatta.main;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import miniregatta.display.*;
+import miniregatta.maps.save.Save;
 import miniregatta.scenes.*;
 import miniregatta.settings.*;
 import miniregatta.speaker.*;
@@ -21,12 +29,49 @@ public class Main {
     static float interpolationProgress;
     static final long nanoPerTick = (long) (1000000000 / Settings.ticksPerSecond);
     static final long nanoPerFrame = (long) (1000000000 / Settings.framesPerSecond);
+    static ArrayList<String> loadedMaps;
 
     public static void main(String[] args) {
         checkMouseDogFile();
+
         speaker.start();
         Main.getSpeaker().addSoundToQueue("/resources/sounds/init.wav");
+
+        createSaveFile();
+
+        loadMaps();
+
         mainLoop();
+    }
+
+    public static void createSaveFile() {
+        File saveFile = new File(Settings.saveFilePath);
+        
+        if (!saveFile.exists()) {
+            try {
+                saveFile.getParentFile().mkdirs();
+                saveFile.createNewFile();
+                
+                FileOutputStream fos = new FileOutputStream(Settings.saveFilePath);
+                BufferedOutputStream bos = new BufferedOutputStream(fos);
+                ObjectOutputStream oos = new ObjectOutputStream(bos);
+                
+                Save save = new Save();
+                oos.writeObject(save);
+        
+                oos.close();
+                bos.close();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void loadMaps() {
+        URL mapDirectoryURL = Main.class.getResource(Settings.mapPath);
+        File mapDirectory = new File(mapDirectoryURL.getPath());
+        loadedMaps = new ArrayList<String>(Arrays.asList(mapDirectory.list()));
     }
 
     public static void mainLoop() {
@@ -52,11 +97,12 @@ public class Main {
                 e.printStackTrace();
             }
         }
+        System.exit(0);
     }
 
     public static void checkMouseDogFile() {
-        URL mouseDogURL = Main.class.getClassLoader().getResource("/resources/mouse_dog.png");
-        if (mouseDogURL != null) {
+        URL mouseDogURL = Main.class.getResource("/resources/mouse_dog.png");
+        if (mouseDogURL == null) {
             throw new java.lang.Error("Mouse-dog image not found");
         }
     }
@@ -79,5 +125,17 @@ public class Main {
 
     public static void changeCurrentScene(SceneTemplate newScene) {
         currentScene = newScene;
+    }
+
+    public static ArrayList<String> getLoadedMaps() {
+        return loadedMaps;
+    }
+
+    public static void stopMainLoop() {
+        System.exit(0);
+    }
+
+    public static long getDeltaTime() {
+        return deltaTimeNano;
     }
 }
