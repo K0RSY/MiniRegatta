@@ -87,7 +87,7 @@ public class Game extends SceneTemplate {
 
     public void loadMap() {
         try {
-            BufferedInputStream bos = (BufferedInputStream) getClass().getResourceAsStream(Settings.mapPath + map);
+            BufferedInputStream bos = new BufferedInputStream(getClass().getResourceAsStream(Settings.mapPath + map));
             ObjectInputStream oos = new ObjectInputStream(bos);
 
             MapTemplate mapData = (MapTemplate) oos.readObject();

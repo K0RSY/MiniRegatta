@@ -5,11 +5,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
-
+import java.util.stream.Stream;
 import miniregatta.display.*;
 import miniregatta.maps.save.Save;
 import miniregatta.scenes.*;
@@ -69,9 +77,30 @@ public class Main {
     }
 
     public static void loadMaps() {
-        URL mapDirectoryURL = Main.class.getResource(Settings.mapPath);
-        File mapDirectory = new File(mapDirectoryURL.getPath());
-        loadedMaps = new ArrayList<String>(Arrays.asList(mapDirectory.list()));
+        try {
+            loadedMaps = new ArrayList<String>();
+            URI mapDirectoryURI = Main.class.getResource(Settings.mapPath).toURI();
+            Path mapPath;
+            FileSystem fileSystem = null;
+            if (mapDirectoryURI.getScheme().equals("jar")) {
+                fileSystem = FileSystems.newFileSystem(mapDirectoryURI, Collections.<String, Object>emptyMap());
+                mapPath = fileSystem.getPath(Settings.mapPath);
+            } else {
+                mapPath = Paths.get(mapDirectoryURI);
+            }
+            Stream<Path> walk = Files.walk(mapPath, 1);
+            for (Iterator<Path> it = walk.iterator(); it.hasNext();) {
+                String[] pathList = ("" + it.next()).split("/");
+                loadedMaps.add(pathList[pathList.length - 1]);
+            }
+            loadedMaps.remove(0);
+            walk.close();
+            if (fileSystem != null) {
+                fileSystem.close();
+            }
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void mainLoop() {

@@ -21,7 +21,19 @@ public class Text extends ObjectTemplate {
         for (int lineCounter = 0; lineCounter < textLines.length; lineCounter++) {
             int startPositionX = positionX - (textLines[lineCounter].length() - 1) * symbolWidth / 2;
             for (int i = 0; i < textLines[lineCounter].length(); i++) {
-                Main.getDisplay().getDisplayPanel().drawImage(pathToImages + textLines[lineCounter].charAt(i) + Settings.imageFile, startPositionX + i * symbolWidth, positionY + lineCounter * symbolWidth);
+                String textureName;
+                String character = "" + textLines[lineCounter].charAt(i);
+                if (character.equals(".")) {
+                    textureName = "dot";
+                } else if (character.equals("+")) {
+                    textureName = "plus";
+                } else if (character.equals(" ")) {
+                    continue;
+                } else {
+                    textureName = character;
+                }
+                textureName += Settings.imageFile;
+                Main.getDisplay().getDisplayPanel().drawImage(pathToImages + textureName, startPositionX + i * symbolWidth, positionY + lineCounter * symbolWidth);
             }
         }
     }

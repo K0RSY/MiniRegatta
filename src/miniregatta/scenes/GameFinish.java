@@ -21,8 +21,8 @@ public class GameFinish extends SceneTemplate {
             message = "";
         }
         message += "\n\n";
-        message += "current time........." + Timer.getFormattedTime(currentTime) + "\n";
-        message += "previous best time..." + Timer.getFormattedTime(previousTime);
+        message += "current time         " + Timer.getFormattedTime(currentTime) + "\n";
+        message += "previous best time   " + Timer.getFormattedTime(previousTime);
 
         objects.get("background").add(new Image(Settings.windowWidth / 2, Settings.windowHeight / 2, "/resources/textures/background.png"));
         

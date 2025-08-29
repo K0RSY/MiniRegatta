@@ -55,7 +55,19 @@ public class TextButton extends Text {
         }
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) != ' ') {
-                Main.getDisplay().getDisplayPanel().drawImage(pathToImages + text.charAt(i) + Settings.imageFile, startPositionX + i * symbolWidth, positionY);
+                String textureName;
+                String character = "" + text.charAt(i);
+                if (character.equals(".")) {
+                    textureName = "dot";
+                } else if (character.equals("+")) {
+                    textureName = "plus";
+                } else if (character.equals(" ")) {
+                    continue;
+                } else {
+                    textureName = character;
+                }
+                textureName += Settings.imageFile;
+                Main.getDisplay().getDisplayPanel().drawImage(pathToImages + textureName, startPositionX + i * symbolWidth, positionY);
             }
         }
     }
