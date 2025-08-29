@@ -5,14 +5,15 @@ import javax.swing.JFrame;
 import miniregatta.reader.*;
 import miniregatta.settings.*;
 
-public class Display {
+public class Display implements Runnable {
     JFrame window = new JFrame();
     DisplayPanel displayPanel = new DisplayPanel();
     KeyReader keyReader = new KeyReader();
     ButtonReader buttonReader = new ButtonReader();
     MouseReader mouseReader = new MouseReader();
     
-    public Display() {
+    @Override
+    public void run() {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(Settings.windowWidth, Settings.windowHeight);
         window.setLocationRelativeTo(null);

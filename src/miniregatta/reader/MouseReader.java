@@ -14,13 +14,13 @@ public class MouseReader implements MouseMotionListener {
     @Override
     public void mouseDragged(MouseEvent e) {
         positionX = e.getX();
-        positionY = e.getY();
+        positionY = e.getY() - Settings.mouseOffset;
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         positionX = e.getX();
-        positionY = e.getY();
+        positionY = e.getY() - Settings.mouseOffset;
     }
 
     public int getPositionX() {

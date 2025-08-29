@@ -12,7 +12,7 @@ import miniregatta.settings.Settings;
 public class Convert {
     public static void main(String[] args) {
         try {
-            FileOutputStream fos = new FileOutputStream("src" + Settings.mapPath + "output.dat");
+            FileOutputStream fos = new FileOutputStream("src" + Settings.mapPath + "tango.dat");
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             ObjectOutputStream oos = new ObjectOutputStream(bos);
 

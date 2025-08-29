@@ -18,6 +18,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
+
+import javax.swing.SwingUtilities;
+
 import miniregatta.display.*;
 import miniregatta.maps.save.Save;
 import miniregatta.scenes.*;
@@ -42,8 +45,10 @@ public class Main {
     public static void main(String[] args) {
         checkMouseDogFile();
 
+        SwingUtilities.invokeLater(display);
+
         speaker.start();
-        Main.getSpeaker().addSoundToQueue("/resources/sounds/init.wav");
+        speaker.addSoundToQueue("/resources/sounds/init.wav");
 
         createSaveFile();
 

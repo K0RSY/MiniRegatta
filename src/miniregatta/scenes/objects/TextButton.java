@@ -78,5 +78,7 @@ public class TextButton extends Text {
 
     public void setText(String text) {
         this.text = text;
+        width = (text.length() + 2) * symbolWidth;
+        height = symbolWidth * 3;
     }
 }

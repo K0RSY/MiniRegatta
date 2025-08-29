@@ -22,6 +22,7 @@ public class Settings {
     public static final int mapsListElementWidth = 30;
     public static final String mapsListElementFiller = " ";
     public static final int worstTime = 118800;
+    public static final int mouseOffset = 30;
     
     public interface ClickFunctionInterface {
         void clickFunction();
