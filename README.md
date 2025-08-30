@@ -21,6 +21,8 @@ To gain the highest speed, you need to set the sail as optimally as possible rel
 ## Run the game
 First, you need to install java if you don't have one. Then you need to download `MiniRegatta-version.jar` from latest release, then run it with your java
 
+If you got error like `A Java exeption has occured`, try to run in terminal: `cd path/to/mini/regatta && java -jar MiniRegatta-version.jar` or reinstall differet java version. Innitial java version for this project - `17.0.25`
+
 ## Galery
 ![image](https://cdn.imgchest.com/files/ye3c292ln24.png)
 ![image](https://cdn.imgchest.com/files/7mmc9d9mkx7.png)
