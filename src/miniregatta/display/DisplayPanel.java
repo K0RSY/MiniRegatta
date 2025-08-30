@@ -29,7 +29,7 @@ public class DisplayPanel extends JPanel {
     Dimension windowSize = new Dimension();
 
     public DisplayPanel() {
-        setBackground(Color.black);
+        setBackground(new Color(22, 115, 178));
         setDoubleBuffered(true);
     }
 
