@@ -2,8 +2,8 @@ package miniregatta.maps.data;
 
 import miniregatta.maps.data.objects.*;
 
-public class MapInput extends MapTemplate {
-    public MapInput() {
+public class ALotOfWind extends MapTemplate {
+    public ALotOfWind() {
         buoys.add(new Buoy(60, 180, 3, true));
         buoys.add(new Buoy(500, 180, 1, true));
 

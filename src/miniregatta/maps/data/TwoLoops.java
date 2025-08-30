@@ -16,7 +16,7 @@ public class TwoLoops extends MapTemplate {
         order.add(2);
         order.add(3);
 
-        yacht = new Yacht(540, 180, 200, 90, 1, 2);
+        yacht = new Yacht(540, 180, 200, 90, 1, 3);
 
         start = new Start(500, 180, 120, 1, 0, true);
 
