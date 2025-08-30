@@ -1,5 +1,8 @@
 package miniregatta.display;
 
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import miniregatta.reader.*;
@@ -18,6 +21,11 @@ public class Display implements Runnable {
         window.setSize(Settings.windowWidth, Settings.windowHeight);
         window.setLocationRelativeTo(null);
         window.setTitle(Settings.title);
+        try {
+            window.setIconImage(ImageIO.read(getClass().getResource("/resources/textures/icon.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         window.add(displayPanel);
         window.addKeyListener(keyReader);
         window.addMouseListener(buttonReader);
